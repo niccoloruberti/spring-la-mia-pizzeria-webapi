@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,5 +59,21 @@ public class PizzaRestController {
 		return new ResponseEntity<>(pizza, HttpStatus.OK);
 	}
 	
+	@PutMapping("{id}")
+	public ResponseEntity<Pizza> update(
+			@PathVariable int id,
+			@RequestBody Pizza newPizza) {
+	
+		Pizza pizza = pizzaService.findById(id);
+		
+		pizza.setNome(newPizza.getNome());
+		pizza.setDescrizione(newPizza.getDescrizione());
+		pizza.setFoto(newPizza.getFoto());
+		pizza.setPrezzo(newPizza.getPrezzo());
+		
+		pizzaService.save(pizza);
+		
+		return new ResponseEntity<>(pizza, HttpStatus.OK);
+	}
 	
 }
