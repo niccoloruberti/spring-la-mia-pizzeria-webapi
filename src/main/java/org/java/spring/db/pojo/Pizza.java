@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -44,7 +45,7 @@ public class Pizza {
 	@Min(value = 1, message = "Il prezzo deve essere maggiore o uguale a 1")
 	private Double prezzo;
 	
-	@OneToMany(mappedBy = "pizza")
+	@OneToMany(mappedBy = "pizza", cascade = CascadeType.REMOVE)
 	private List<OffertaSpeciale> offerte;
 	
 	@ManyToMany
