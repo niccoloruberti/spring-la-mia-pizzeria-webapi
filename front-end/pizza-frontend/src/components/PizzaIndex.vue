@@ -1,5 +1,6 @@
 <template lang="">
     <h2 class="mb-5">Tutte le pizze:</h2>
+    
     <ul>
         <li 
             class="list-unstyled"
@@ -7,7 +8,7 @@
             :key="pizza.id"
         >
             {{ pizza.nome }}
-            <button 
+            <button
             class="btn btn-danger"
             @click="deletePizza(pizza.id)"
             >elimina</button>
@@ -17,8 +18,11 @@
 </template>
 
 <script setup>
+
+    //data
+
     // import libraries
-    import { defineProps } from 'vue';
+    import { defineProps, ref } from 'vue';
     import axios from 'axios';
 
     // props
@@ -32,13 +36,15 @@
     //emits
     const emits = defineEmits("deleted");
 
+    //functions
     const deletePizza = async (pizzaId) => {
 
     await axios.delete(`http://localhost:8080/api/v1.0/pizzas/${pizzaId}`);
     
     emits("deleted");
 
-};
+    };
+
 
 
 </script>

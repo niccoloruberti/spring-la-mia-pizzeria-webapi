@@ -1,8 +1,17 @@
 <template>
 
+  <div>
+    <input
+      type="text"
+      v-model="searchStr"
+      placeholder="Cerca una pizza..."
+    />
+    <button @click="search">Cerca</button>
+  </div>
+
   <!-- pizza index -->
   <PizzaIndex
-  :pizzas="pizzas"
+  :pizzas="(isFiltered ? filteredPizzas : pizzas)"
   v-if="!creatingPizza"
   @deleted="pizzaDeleted"
   />
@@ -38,7 +47,10 @@
 
   //data
   const pizzas = ref(null);
+  let filteredPizzas = ref(null);
   const creatingPizza = ref(false);
+  let searchStr = ref(null);
+  let isFiltered = ref(false);
 
   //functions
 
@@ -49,13 +61,29 @@
 
   const pizzaDeleted = () => {
   creatingPizza.value = false;
+  isFiltered.value = false;
   getPizzas();
   };
 
   const getPizzas = async () => {
   const data = await axios.get("http://localhost:8080/api/v1.0/pizzas");
   pizzas.value = data.data;
+  console.log(pizzas)
   };
+
+
+  const search = () => {
+  if (searchStr.value !== null) {
+    // Filtra le pizze solo se c'è una stringa di ricerca
+    filteredPizzas.value = pizzas.value.filter((pizza) =>
+      pizza.nome.toLowerCase().includes(searchStr.value.toLowerCase())
+    );
+    isFiltered.value = true;
+  } else {
+    // Altrimenti, ripristina l'elenco completo di pizze
+    getPizzas();
+  }
+  }
 
   //hooks
   onMounted(getPizzas);
