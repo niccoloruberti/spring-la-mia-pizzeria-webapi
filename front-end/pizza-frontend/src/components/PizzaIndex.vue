@@ -7,6 +7,10 @@
             :key="pizza.id"
         >
             {{ pizza.nome }}
+            <button 
+            class="btn btn-danger"
+            @click="deletePizza(pizza.id)"
+            >elimina</button>
         </li>
     </ul>
 
@@ -15,6 +19,7 @@
 <script setup>
     // import libraries
     import { defineProps } from 'vue';
+    import axios from 'axios';
 
     // props
     const props = defineProps({
@@ -23,6 +28,17 @@
             required: true
         }
     });
+
+    //emits
+    const emits = defineEmits("deleted");
+
+    const deletePizza = async (pizzaId) => {
+
+    await axios.delete(`http://localhost:8080/api/v1.0/pizzas/${pizzaId}`);
+    
+    emits("deleted");
+
+};
 
 
 </script>
